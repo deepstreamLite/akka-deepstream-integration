@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Price Streaming Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/deepstream.io-client-js/2.1.1/deepstream.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    .greyed {
+      opacity: 0.2;
+    }
+  </style>
+</head>
+
+<body>
+<table id="prices">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Receive updates</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+</body>
+
+<script type="text/javascript">
+
+const companies = [
+  { fullName: 'Dynavax Technologies', name: 'DVAX'},
+  { fullName: 'Sohu.com Inc.', name: 'SOHU'},
+  { fullName: 'Cytrx', name: 'CYTR'},
+  { fullName: 'Randgold Resources Limited Ads', name: 'GOLD'},
+  { fullName: 'Dryships', name: 'DRYS'},
+  { fullName: 'Nvidia', name: 'NVDA'},
+  { fullName: 'Gen Probe', name: 'GPRO'},
+  { fullName: 'Amazon.com', name: 'AMZN'},
+  { fullName: 'Apple', name: 'AAPL'},
+  { fullName: 'Baidu', name: 'BIDU'},
+  { fullName: 'Changyou.com Limited - American Depository', name: 'CYOU'},
+  { fullName: 'Starbucks', name: 'SBUX'},
+  { fullName: 'Flir Systems', name: 'FLIR'},
+  { fullName: 'Asml Holding N.v. - New York Registry', name: 'ASML'},
+  { fullName: 'Netease.com Ads', name: 'NTES'},
+  { fullName: 'Ulta Salon Cosmetics Fragrance', name: 'ULTA'},
+  { fullName: 'Expedia', name: 'EXPE'},
+  { fullName: 'Mylan Inc.', name: 'MYL'},
+  { fullName: 'First Solar', name: 'FSLR'},
+  { fullName: 'Google Inc.', name: 'GOOG'},
+  { fullName: 'Qualcomm Incorporated', name: 'QCOM'},
+  { fullName: 'Netflix', name: 'NFLX'},
+  { fullName: 'Gilead Sciences', name: 'GILD'},
+  { fullName: 'Kla-tencor', name: 'KLAC'},
+  { fullName: 'Amgen Inc.', name: 'AMGN'},
+  { fullName: 'Sirius Xm Radio Inc.', name: 'SIRI'},
+  { fullName: 'Charter Communications', name: 'CHTR'},
+  { fullName: 'Noven Pharmaceuticals', name: 'NOVN'},
+  { fullName: 'Verisign', name: 'VRSN'},
+  { fullName: 'Ebay Inc.', name: 'EBAY'},
+  { fullName: 'Costco Wholesale', name: 'COST'},
+  { fullName: 'Activision Blizzard', name: 'ATVI'},
+  { fullName: 'Endo Pharmaceuticals Holdings Inc', name: 'ENDP'},
+  { fullName: 'Priceline', name: 'PCLN'},
+  { fullName: 'Alkermes', name: 'ALKS'},
+  { fullName: 'Allot Communications Ltd.', name: 'ALLT'}
+]
+
+const client = deepstream('localhost:6020')
+client.login()
+
+companies.forEach(c => client.event.subscribe(`prices/${c.name}`, updateUi))
+
+function handleClick (item) {
+  const id = `#${item.name}`
+  if (item.checked) {
+    // subscribe and ungrey
+    $(id).removeClass('greyed')
+    client.event.subscribe(`prices/${item.name}`, updateUi)
+  } else {
+    // unsubscribe and greyout
+    $(id).addClass('greyed')
+    client.event.unsubscribe(`prices/${item.name}`, updateUi)
+  }
+}
+
+function updateUi (data) {
+  const field = $(`#${data.name}-price`)
+  field.text(`$${data.price}`)
+}
+
+var table = $('#prices tbody')
+
+$.each(companies, (i, c) => {
+  table.append(`
+    <tr id="${c.name}">
+      <td>${c.fullName}</td>
+      <td>${c.name}</td>
+      <td id="${c.name}-price"></td>
+      <td><input type="checkbox" name="${c.name}" checked onclick="handleClick(this);"></td>
+    </tr>
+  `)
+});
+
+</script>
+</html>
