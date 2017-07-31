@@ -49,7 +49,7 @@ class PriceStreamingActor extends Actor {
   }
 }
 
-class DeepstreamActor extends Actor with ListenListener {
+private class DeepstreamActor extends Actor with ListenListener {
   private var dsClient : DeepstreamClient = _
   private var subscriptions = mutable.Set[String]()
 
@@ -89,9 +89,3 @@ class DeepstreamActor extends Actor with ListenListener {
     this.subscriptions -= subscription
   }
 }
-
-object start extends App {
-  val system: ActorSystem = ActorSystem("price-system")
-  val streamingActor = system.actorOf(Props[PriceStreamingActor])
-}
-

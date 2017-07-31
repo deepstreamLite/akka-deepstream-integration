@@ -24,6 +24,25 @@
     .greyed {
       opacity: 0.2;
     }
+
+    tr {
+      transition: background-color 1s;
+    }
+
+    .pending {
+      background-color: orange; !important
+      transition: background-color 1s;
+    }
+
+    .success {
+      background-color: green; !important
+      transition: background-color 1s;
+    }
+
+    .error {
+      background-color: red; !important
+      transition: background-color 1s;
+    }
   </style>
 </head>
 
@@ -35,6 +54,7 @@
       <th>Name</th>
       <th>Price</th>
       <th>Receive updates</th>
+      <th>Purchase stock</th>
     </tr>
   </thead>
   <tbody>
@@ -102,9 +122,36 @@ function handleClick (item) {
   }
 }
 
+const prices = {}
 function updateUi (data) {
+  prices[data.name] = data.price
   const field = $(`#${data.name}-price`)
   field.text(`$${data.price}`)
+}
+
+function purchaseComplete (error, name) {
+  const row = $(`#${name}`)
+  row.removeClass('pending')
+  let clazz
+  if (error) {
+    // flash red
+    clazz = 'error'
+  } else {
+    // flash green
+    clazz = 'success'
+  }
+  row.addClass(clazz)
+  setTimeout(() => row.removeClass(clazz), 1000)
+}
+
+function purchase (item) {
+  const price = prices[item.name]
+  const row = $(`#${item.name}`)
+  row.addClass('pending')
+
+  client.rpc.make('purchase', { name: item.name, price }, (err, data) => {
+    purchaseComplete(err, item.name)
+  })
 }
 
 var table = $('#prices tbody')
@@ -116,6 +163,7 @@ $.each(companies, (i, c) => {
       <td>${c.name}</td>
       <td id="${c.name}-price"></td>
       <td><input type="checkbox" name="${c.name}" checked onclick="handleClick(this);"></td>
+      <td><button type="button" name="${c.name}" onclick="purchase(this);">Purchase</button></td>
     </tr>
   `)
 });
