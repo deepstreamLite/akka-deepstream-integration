@@ -1,4 +1,4 @@
-name := "akka-quickstart-scala"
+name := "akka-deepstream-price-updates"
 
 version := "1.0"
 

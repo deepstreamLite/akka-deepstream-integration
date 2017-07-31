@@ -1,4 +1,4 @@
-package com.lightbend.akka.sample
+package com.deepstream_akka.integration
 
 import java.util
 
