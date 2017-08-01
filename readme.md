@@ -1,6 +1,8 @@
 ### Akka and Deepstream together
 
-A simple example repository showing integration with Akka and Deepstream, this repository consists of a front end interface with a Deepstream client and some simple back end micro services built with Akka and Deepstream. One of the micro-services provides (mock) financial data while the other handles purchases of stocks. In reality there are many different services you could run other than these, such as admin functionality or metrics collection.
+In many regards Akka and deepstream are quite similar, they both enable building highly available, scalable and fault tolerant applications. Akka achieves this by using a battle tested supervisor hierarchy where errors are only propagated as high as necessary through the tree of nodes. This means that each node knows how to deal with a child failing and can then remedy the state by spawning a new child node or or by sending messages to a failover child. Deepstream accomplishes this by clustering nodes for failover as well as availability. Functionality is then added by connecting client processes which can provide endpoints via RPCs, provide data to interested clients via listening and consume data via subscriptions.
+
+This repository consists of a simple example showing how to integrate Deepstream and Akka. We have a front end interface with a Deepstream client and some simple back end micro services built with Akka and Deepstream. One of the micro-services provides (mock) financial data while the other handles purchases of stocks. In reality there are many different services you could run other than these, such as admin functionality or metrics collection.
 
 In production, at its simplest it could look as follows:
 
