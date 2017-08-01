@@ -21,7 +21,7 @@ class PriceStreamingActor extends Actor {
   val list = new util.ArrayList[(String, String)]()
 
   override def preStart: Unit = {
-    val lines = Source.fromFile("src/main/scala/com/lightbend/akka/sample/test-data.csv").getLines()
+    val lines = Source.fromFile("src/main/scala/com/deepstream_akka/integration/test-data.csv").getLines()
     lines.foreach(line => {
       val split = line.split(",")
       list.add((split(0), split(1)))
