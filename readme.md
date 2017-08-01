@@ -8,9 +8,9 @@ In production, at its simplest it could look as follows:
 
 Each customer has a deepstream client in their browser which connects to a load balanced deepstream cluster. Behind the Deepstreams we have two micro service clusters:
 
-1. A cluster of Akka nodes providing price updates to the Deepstreams. The actual updates are sent via a normal Deepstream client using `listening`, a concept where updates only need to be provided when we have interested clients. With the front end we're able to indicate which prices we're interested in dynamically so that only these will be sent
+1. A cluster of Akka nodes providing price updates to the Deepstreams. The actual updates are sent via a normal Deepstream client using `listening`, a concept where updates only need to be provided when we have interested clients. With the front end we're able to indicate which prices we're interested in dynamically so that only these will be sent. It's important to note that either Deepstream records or events can be used to stream these price updates, we've opted for events as we don't need the prices to be persisted anywhere, however if we wanted to support snapshots of data we could use records.
 
-2. A cluster of Akka nodes handling purchases of stocks. To showcase failure and success scenarios, every second purchase will fail with a red flash of the row. Each successful purchase will give a green flash.
+2. A cluster of Akka nodes handling purchases of stocks. This represents the request-response functionality of Deepstream with exactly once delivery, something crucial for things like purchases. To showcase failure and success scenarios, every second purchase will fail with a red flash of the row. Each successful purchase will give a green flash.
 
 ### How to run
 
@@ -46,4 +46,4 @@ The back end micro services were built using Scala and as such you should be abl
 
 ##### Front end
 
-The web interface is self contained and relies on CDNs for dependencies. As such you should just be able to open the `index.html` file.
+The web interface is self contained and relies on CDNs for dependencies. You should just be able to open the `index.html` file in a browser of your choice.
