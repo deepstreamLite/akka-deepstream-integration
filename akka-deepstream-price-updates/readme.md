@@ -14,6 +14,36 @@ Each customer has a deepstream client in their browser which connects to a load 
 
 ### How to run
 
+##### Deepstream
+
+The first thing that needs to start in this architecture is the Deepstream server. You can download this off npm, clone it from GitHub or download the binary. For simplicity we'll be downloading it from npm.
+
+```
+\> npm install -g deepstream.io
+\> deepstream
+      _                     _
+   __| | ___  ___ _ __  ___| |_ _ __ ___  __ _ _ __ ____
+  / _` |/ _ \/ _ \ '_ \/ __| __| '__/ _ \/ _` | '_ ` _  \
+ | (_| |  __/  __/ |_) \__ \ |_| | |  __/ (_| | | | | | |
+  \__,_|\___|\___| .__/|___/\__|_|  \___|\__,_|_| |_| |_|
+                 |_|
+ =====================   starting   ======================
+```
+
 ##### Back end
 
-The back end micro services were built using Scala and as suc
+The back end micro services were built using Scala and as such you should be able to run them using sbt as follows:
+
+```
+\> git clone git@github.com:deepstreamIO/akka-deepstream-integration.git
+\> cd akka-deepstream-integration
+\> ./sbt
+...
+...
+...
+...\> run
+```
+
+##### Front end
+
+The web interface is self contained and relies on CDNs for dependencies. As such you should just be able to open the `index.html` file.
