@@ -15,11 +15,11 @@ class PurchasingActor extends Actor {
   override def postStop: Unit = println("SupervisingActor stopped")
   override def receive: Receive = Actor.emptyBehavior
 
-  val child = context.actorOf(Props[DeepstreamActor1])
+  val child = context.actorOf(Props[PurchaseDeepstreamActor])
   child ! "init"
 }
 
-private class DeepstreamActor1 extends Actor with RpcRequestedListener {
+private class PurchaseDeepstreamActor extends Actor with RpcRequestedListener {
   private var dsClient : DeepstreamClient = _
   private var failNext : Boolean = false
 

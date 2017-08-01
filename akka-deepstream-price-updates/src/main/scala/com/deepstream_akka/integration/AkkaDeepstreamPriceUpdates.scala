@@ -13,8 +13,7 @@ import scala.io.Source
 case class PriceUpdate(name: String, fullName: String, price: Double)
 
 class PriceStreamingActor extends Actor {
-  val child = context.actorOf(Props[DeepstreamActor])
-  println(child)
+  val child = context.actorOf(Props[StreamingDeepstreamActor])
   val r = new scala.util.Random
   var running = true
 
@@ -42,14 +41,14 @@ class PriceStreamingActor extends Actor {
         child ! PriceUpdate(
           name._1,
           name._2,
-          20 + r.nextInt(( 30 - 20) + 1))
+          20 + r.nextInt((70 - 20) + 1))
       })
-      Thread.sleep(1000)
+      Thread.sleep(500)
     }
   }
 }
 
-private class DeepstreamActor extends Actor with ListenListener {
+private class StreamingDeepstreamActor extends Actor with ListenListener {
   private var dsClient : DeepstreamClient = _
   private var subscriptions = mutable.Set[String]()
 
@@ -79,13 +78,11 @@ private class DeepstreamActor extends Actor with ListenListener {
   }
 
   override def onSubscriptionForPatternAdded(subscription: String) : Boolean = {
-    println("Subscription added for", subscription)
     this.subscriptions += subscription
     return true
   }
 
   override def onSubscriptionForPatternRemoved(subscription: String) = {
-    println("Subcription removed for", subscription)
     this.subscriptions -= subscription
   }
 }

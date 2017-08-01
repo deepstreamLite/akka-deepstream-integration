@@ -49,3 +49,9 @@ The back end micro services were built using Scala and as such you should be abl
 ##### Front end
 
 The web interface is self contained and relies on CDNs for dependencies. You should just be able to open the `index.html` file in a browser of your choice.
+
+##### Demo
+
+Once running, it should look a bit like this:
+
+![demo-gif](demo.gif)
