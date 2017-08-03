@@ -21,7 +21,8 @@ Each customer has a deepstream client in their browser which connects to a load 
 The first thing that needs to start in this architecture is the Deepstream server. You can download this off npm, clone it from GitHub or download the binary. For simplicity we'll be downloading it from npm.
 
 ```
-\> npm install -g deepstream.io
+/> sudo wget https://bintray.com/deepstreamio/rpm/rpm -O /etc/yum.repos.d/bintray-deepstreamio-rpm.repo
+\> sudo yum install deepstream.io-3.0.0
 \> deepstream
       _                     _
    __| | ___  ___ _ __  ___| |_ _ __ ___  __ _ _ __ ____
@@ -38,7 +39,7 @@ The back end micro services were built using Scala and as such you should be abl
 
 ```
 \> git clone git@github.com:deepstreamIO/akka-deepstream-integration.git
-\> cd akka-deepstream-integration
+\> cd akka-deepstream-integration/akka-deepstream-price-updates
 \> ./sbt
 ...
 ...

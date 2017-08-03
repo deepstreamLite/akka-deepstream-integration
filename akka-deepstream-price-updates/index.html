@@ -104,7 +104,7 @@ const companies = [
   { fullName: 'Allot Communications Ltd.', name: 'ALLT'}
 ]
 
-const client = deepstream('localhost:6020')
+const client = deepstream('ec2-54-93-56-99.eu-central-1.compute.amazonaws.com:6020')
 client.login()
 
 companies.forEach(c => client.event.subscribe(`prices/${c.name}`, updateUi))

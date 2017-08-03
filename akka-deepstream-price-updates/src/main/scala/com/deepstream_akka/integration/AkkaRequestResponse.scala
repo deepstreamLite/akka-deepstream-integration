@@ -28,7 +28,7 @@ private class PurchaseDeepstreamActor extends Actor with RpcRequestedListener {
 
   override def receive = {
     case "init" => {
-      this.dsClient = new DeepstreamClient("localhost:6020")
+      this.dsClient = new DeepstreamClient("ec2-18-196-1-50.eu-central-1.compute.amazonaws.com")
       val loginResult = this.dsClient.login()
       if (loginResult.loggedIn) {
         println("DeepstreamClient login")
