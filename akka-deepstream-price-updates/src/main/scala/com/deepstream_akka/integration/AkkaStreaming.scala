@@ -44,10 +44,8 @@ class PricePublisher extends ActorPublisher[Price] {
 
   def publish = {
     while(isActive && totalDemand > 0) {
-      println(totalDemand)
       this.list.forEach(name => {
         val price = 20 + r.nextInt((70 - 20) + 1)
-        println(s"onNext price: $price, name: $name")
         onNext(Price(
           price,
           name
@@ -59,7 +57,6 @@ class PricePublisher extends ActorPublisher[Price] {
 
   override def receive: Receive = {
     case Request(cnt) => {
-      println(s"Publisher received request for $cnt messages")
       this.publish
     }
   }
@@ -77,12 +74,10 @@ class Aggregator extends ActorSubscriber with ActorPublisher[Price] {
 
   override def receive: Receive = {
     case OnNext(p: Price) => {
-      println("Aggregator received price")
       onNext(Price(p.price * currentRate, p.name))
     }
     case InterestRate(rate) => {
       this.currentRate = rate
-      println(s"Aggregator received interest rate")
     }
   }
 }
@@ -93,28 +88,21 @@ class DsActor extends ActorSubscriber with ListenListener {
 
   val requestStrategy = new MaxInFlightRequestStrategy(36) {
     override def inFlightInternally = 0
-
     override def batchSize: Int = 36
   }
 
-
-
   override def onSubscriptionForPatternAdded(subscription: String): Boolean = {
-    println("onSubscriptionForPatternAdded")
     this.subscriptions += subscription
     return true
   }
 
   override def onSubscriptionForPatternRemoved(subscription: String): Unit = {
-    println("onSubscriptionForPatternRemoved")
     this.subscriptions -= subscription
   }
 
   override def receive: Receive = {
     case OnNext(p: Price) => {
-      println(this.subscriptions)
       if (this.subscriptions.contains(s"prices/${p.name}")) {
-        println("emitting")
         val jsonObject = new JsonObject
         jsonObject.addProperty("name", p.name)
         jsonObject.addProperty("price", p.price)
@@ -158,7 +146,7 @@ class PriceStreamingRootActor extends Actor {
   aggregatorPublisher.subscribe(dsSubscriber)
 
   while (true) {
-    val interestRate = 0 + r.nextInt((5 - 0) + 0)
+    val interestRate = 1 + r.nextInt((5 - 1) + 1)
     aggregator ! InterestRate(interestRate)
     Thread.sleep(1000)
   }
@@ -166,7 +154,3 @@ class PriceStreamingRootActor extends Actor {
   override def receive: Receive = ???
 }
 
-object StreamingApp extends App {
-  val system = ActorSystem("streaming-system")
-  val rootActor = system.actorOf(Props[PriceStreamingRootActor])
-}
